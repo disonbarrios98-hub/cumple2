@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños!</title>
+    <!-- Tailwind CSS for modern layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti Library for particle explosions -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;600;700&display=swap');
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 50%, #fae8ff 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 16px;
+            overflow-x: hidden;
+        }
+
+        .heading-font {
+            font-family: 'Fredoka', cursive;
+        }
+
+        /* Card Container styling with dashed border matching the image style */
+        .card-box {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border: 2.5px dashed #f472b6;
+            border-radius: 28px;
+            box-shadow: 0 15px 35px rgba(244, 114, 182, 0.18), 0 5px 15px rgba(0,0,0,0.03);
+            width: 100%;
+            max-width: 380px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Smooth Screen Transitions */
+        .screen-fade {
+            animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Gentle pulse animation for gift box */
+        .gift-bounce {
+            animation: giftPulse 1.8s infinite ease-in-out;
+        }
+
+        @keyframes giftPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06) rotate(1deg); }
+        }
+
+        /* Bouncing button animation */
+        .bounce-anim {
+            animation: gentleBounce 1.8s infinite ease-in-out;
+        }
+
+        @keyframes gentleBounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-7px); }
+            60% { transform: translateY(-3px); }
+        }
+
+        /* Heart glow filter */
+        .heart-glow {
+            filter: drop-shadow(0px 3px 6px rgba(219, 39, 119, 0.35));
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+    <div class="card-box p-6 sm:p-8 text-center my-auto">
+
+        <!-- ================= PANTALLA 1: REGALO / INICIO ================= -->
+        <div id="screen1" class="screen-fade flex flex-col items-center">
+            <h1 class="heading-font text-3xl font-bold text-pink-600 mb-2 flex items-center justify-center gap-2">
+                <span>🎂</span> ¡Feliz Cumpleaños! <span>🎂</span>
+            </h1>
+            <p class="text-pink-800 text-sm font-semibold mb-8 flex items-center justify-center gap-1">
+                <span>🎉</span> Toca el regalo para ver tu sorpresa <span>🎉</span>
+            </p>
+
+            <div onclick="openGift()" class="gift-bounce w-full bg-pink-50/50 hover:bg-pink-100/50 border-2 border-dashed border-pink-200 rounded-2xl p-8 cursor-pointer transition-all duration-300 group shadow-sm hover:shadow-md">
+                <div class="text-8xl mb-4 transform transition-transform group-hover:scale-110">
+                    🎁
+                </div>
+                <div class="heading-font text-2xl font-bold text-pink-600 tracking-wide group-hover:text-pink-700">
+                    Ábreme
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PANTALLA 2: PASTEL EXACTO ================= -->
+        <div id="screen2" class="hidden screen-fade flex flex-col items-center">
+            <!-- Exact 3-Tier Soft Pink Cake SVG -->
+            <div class="w-full flex justify-center items-center py-2 relative">
+                <svg viewBox="0 0 240 260" class="w-64 h-auto" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <!-- Soft Shadow Filter for realistic depth -->
+                        <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#db2777" flood-opacity="0.12" />
+                        </filter>
+
+                        <!-- Heart Gradient -->
+                        <radialGradient id="heart-grad" cx="30%" cy="30%" r="70%">
+                            <stop offset="0%" stop-color="#ff4d8d" />
+                            <stop offset="60%" stop-color="#db2777" />
+                            <stop offset="100%" stop-color="#9d174d" />
+                        </radialGradient>
+
+                        <!-- Static Smooth Flame Gradient -->
+                        <linearGradient id="flame-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" />
+                            <stop offset="65%" stop-color="#f59e0b" />
+                            <stop offset="100%" stop-color="#d97706" />
+                        </linearGradient>
+
+                        <radialGradient id="flame-inner" cx="50%" cy="80%" r="50%">
+                            <stop offset="0%" stop-color="#fef08a" />
+                            <stop offset="100%" stop-color="#f59e0b" />
+                        </radialGradient>
+
+                        <!-- Soft White Frosting Gradient -->
+                        <linearGradient id="frosting-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff" />
+                            <stop offset="100%" stop-color="#fff1f2" />
+                        </linearGradient>
+
+                        <!-- Soft Static Flame Glow Filter -->
+                        <filter id="flame-glow-filter" x="-50%" y="-50%" width="200%" height="200%">
+                            <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#f59e0b" flood-opacity="0.6" />
+                        </filter>
+                    </defs>
+
+                    <!-- BASE SHADOW / PLATO -->
+                    <ellipse cx="120" cy="242" rx="90" ry="10" fill="#fbcfe8" opacity="0.6" />
+                    <ellipse cx="120" cy="239" rx="80" ry="7" fill="#f472b6" opacity="0.25" />
+
+                    <!-- ================= PISO INFERIOR (PISO 3) ================= -->
+                    <g filter="url(#soft-shadow)">
+                        <!-- Main Tier Body -->
+                        <rect x="35" y="170" width="170" height="65" rx="14" fill="#fbcfe8" />
+                        <!-- Bottom Shadow Detail -->
+                        <path d="M 35 220 Q 120 240 205 220 L 205 221 C 205 228 199 235 191 235 L 49 235 C 41 235 35 228 35 221 Z" fill="#f472b6" opacity="0.3" />
+                        <!-- Cream Scalloped Frosting Top -->
+                        <path d="M 35 178 
+                                 Q 43.5 170 52 178 Q 60.5 170 69 178 Q 77.5 170 86 178 
+                                 Q 94.5 170 103 178 Q 111.5 170 120 178 Q 128.5 170 137 178 
+                                 Q 145.5 170 154 178 Q 162.5 170 171 178 Q 179.5 170 188 178 
+                                 Q 196.5 170 205 178 L 205 170 C 205 163 199 157 191 157 L 49 157 C 41 157 35 163 35 170 Z" 
+                              fill="url(#frosting-grad)" />
+                        <!-- White Pearls Pattern along bottom -->
+                        <g fill="#ffffff" opacity="0.95">
+                            <circle cx="48" cy="225" r="3" />
+                            <circle cx="66" cy="225" r="3" />
+                            <circle cx="84" cy="225" r="3" />
+                            <circle cx="102" cy="225" r="3" />
+                            <circle cx="120" cy="225" r="3" />
+                            <circle cx="138" cy="225" r="3" />
+                            <circle cx="156" cy="225" r="3" />
+                            <circle cx="174" cy="225" r="3" />
+                            <circle cx="192" cy="225" r="3" />
+                        </g>
+                    </g>
+
+                    <!-- ================= PISO MEDIO (PISO 2) ================= -->
+                    <g filter="url(#soft-shadow)">
+                        <!-- Main Tier Body -->
+                        <rect x="52" y="115" width="136" height="55" rx="12" fill="#fbcfe8" />
+                        <!-- Bottom Shadow Detail -->
+                        <path d="M 52 158 Q 120 175 188 158 L 188 158 C 188 164 183 170 176 170 L 64 170 C 57 170 52 164 52 158 Z" fill="#f472b6" opacity="0.25" />
+                        <!-- Cream Scalloped Frosting Top -->
+                        <path d="M 52 122 
+                                 Q 60.5 114 69 122 Q 77.5 114 86 122 Q 94.5 114 103 122 
+                                 Q 111.5 114 120 122 Q 128.5 114 137 122 Q 145.5 114 154 122 
+                                 Q 162.5 114 171 122 Q 179.5 114 188 122 L 188 115 C 188 109 183 103 176 103 L 64 103 C 57 103 52 109 52 115 Z" 
+                              fill="url(#frosting-grad)" />
+                        <!-- White Pearls -->
+                        <g fill="#ffffff" opacity="0.9">
+                            <circle cx="68" cy="160" r="2.5" />
+                            <circle cx="84" cy="160" r="2.5" />
+                            <circle cx="156" cy="160" r="2.5" />
+                            <circle cx="172" cy="160" r="2.5" />
+                        </g>
+                        <!-- CORAZÓN CENTRAL VIBRANTE FUCSIA -->
+                        <g class="heart-glow">
+                            <path d="M 120 152 C 112 138 98 142 98 153 C 98 163 120 173 120 173 C 120 173 142 163 142 153 C 142 142 128 138 120 152 Z" fill="url(#heart-grad)" />
+                            <!-- White Highlight on Heart -->
+                            <path d="M 104 147 C 102 150 102 154 105 156" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.75" fill="none" />
+                        </g>
+                    </g>
+
+                    <!-- ================= PISO SUPERIOR (PISO 1) ================= -->
+                    <g filter="url(#soft-shadow)">
+                        <!-- Main Tier Body -->
+                        <rect x="70" y="68" width="100" height="48" rx="10" fill="#fbcfe8" />
+                        <!-- Cream Scalloped Frosting Top -->
+                        <path d="M 70 75 
+                                 Q 78.3 67 86.6 75 Q 95 67 103.3 75 Q 111.6 67 120 75 
+                                 Q 128.3 67 136.6 75 Q 145 67 153.3 75 Q 161.6 67 170 75 
+                                 L 170 68 C 170 62 165 57 159 57 L 81 57 C 75 57 70 62 70 68 Z" 
+                              fill="url(#frosting-grad)" />
+                        <!-- White Pearls -->
+                        <g fill="#ffffff" opacity="0.9">
+                            <circle cx="85" cy="106" r="2.5" />
+                            <circle cx="102" cy="106" r="2.5" />
+                            <circle cx="120" cy="106" r="2.5" />
+                            <circle cx="138" cy="106" r="2.5" />
+                            <circle cx="155" cy="106" r="2.5" />
+                        </g>
+                    </g>
+
+                    <!-- ================= TRES VELAS TRICOLOR (LLAMAS ESTÁTICAS) ================= -->
+                    <!-- VELA 1: ROSA PASTEL (Izquierda) -->
+                    <g>
+                        <rect x="85" y="32" width="7" height="28" rx="3.5" fill="#f472b6" />
+                        <rect x="87" y="32" width="2" height="28" fill="#fbcfe8" opacity="0.6" />
+                        <line x1="88.5" y1="32" x2="88.5" y2="28" stroke="#71717a" stroke-width="1.2" stroke-linecap="round" />
+                        <!-- Llama Estática 1 (Sin animación/sin parpadeo) -->
+                        <g filter="url(#flame-glow-filter)">
+                            <path d="M 88.5 12 C 83 20 94 20 88.5 28 C 83 20 94 20 88.5 12 Z" fill="url(#flame-grad)" />
+                            <path d="M 88.5 17 C 85.5 22 91.5 22 88.5 27 C 85.5 22 91.5 22 88.5 17 Z" fill="url(#flame-inner)" />
+                        </g>
+                    </g>
+
+                    <!-- VELA 2: AZUL / CELESTE PASTEL (Centro) -->
+                    <g>
+                        <rect x="116.5" y="26" width="7" height="34" rx="3.5" fill="#38bdf8" />
+                        <rect x="118.5" y="26" width="2" height="34" fill="#bae6fd" opacity="0.6" />
+                        <line x1="120" y1="26" x2="120" y2="22" stroke="#71717a" stroke-width="1.2" stroke-linecap="round" />
+                        <!-- Llama Estática 2 (Sin animación/sin parpadeo) -->
+                        <g filter="url(#flame-glow-filter)">
+                            <path d="M 120 6 C 114 14 126 14 120 22 C 114 14 126 14 120 6 Z" fill="url(#flame-grad)" />
+                            <path d="M 120 11 C 117 16 123 16 120 21 C 117 16 123 16 120 11 Z" fill="url(#flame-inner)" />
+                        </g>
+                    </g>
+
+                    <!-- VELA 3: AMARILLA PASTEL (Derecha) -->
+                    <g>
+                        <rect x="148" y="32" width="7" height="28" rx="3.5" fill="#facc15" />
+                        <rect x="150" y="32" width="2" height="28" fill="#fef08a" opacity="0.7" />
+                        <line x1="151.5" y1="32" x2="151.5" y2="28" stroke="#71717a" stroke-width="1.2" stroke-linecap="round" />
+                        <!-- Llama Estática 3 (Sin animación/sin parpadeo) -->
+                        <g filter="url(#flame-glow-filter)">
+                            <path d="M 151.5 12 C 146 20 157 20 151.5 28 C 146 20 157 20 151.5 12 Z" fill="url(#flame-grad)" />
+                            <path d="M 151.5 17 C 148.5 22 154.5 22 151.5 27 C 148.5 22 154.5 22 151.5 17 Z" fill="url(#flame-inner)" />
+                        </g>
+                    </g>
+                </svg>
+            </div>
+
+            <!-- Botón Deslizar Abajo -->
+            <button onclick="openLetter()" class="bounce-anim mt-4 w-full bg-white hover:bg-pink-50/80 border-2 border-dashed border-pink-300 rounded-2xl py-3 px-4 text-pink-600 cursor-pointer transition-all duration-300 shadow-sm hover:shadow">
+                <div class="heading-font text-base font-bold flex items-center justify-center gap-1">
+                    <span class="text-xs">︾</span> Desliza abajo <span class="text-xs">︾</span>
+                </div>
+                <div class="text-xs font-semibold text-pink-500 mt-0.5">
+                        ¡Espero que te guste, lo hice para ti con mucho cariño! 🌷
+                </div>
+            </button>
+        </div>
+
+        <!-- ================= PANTALLA 3: CARTA DE AMOR ================= -->
+        <div id="screen3" class="hidden screen-fade">
+            <div class="border-2 border-dashed border-pink-200 rounded-2xl p-5 bg-white/80 backdrop-blur-sm text-center">
+                <h2 class="heading-font text-lg sm:text-xl font-bold text-pink-600 mb-4 flex items-center justify-center gap-1 flex-wrap">
+                    ¡Feliz cumpleaños! 🎂✨
+                </h2>
+                <div class="text-pink-950 text-xs sm:text-sm leading-relaxed space-y-3 font-medium">
+                    <p>
+                        Hoy quiero escribirte con todo cariño, porque hoy es un día verdaderamente especial: es el día en que llegaste al mundo, y la vida se volvió un poco más hermosa desde entonces. Aunque no nos conozcamos en persona, quiero que sepas que te tengo un cariño muy grande y valoro muchísimo todo lo que compartimos. 🥰
+                    </p>
+                    <p>
+                       He visto en ti una persona llena de luz, con una forma de ser tan auténtica, tan dulce y tan especial que alegra los días solo con estar ahí. Tienes una bondad que se siente, una ternura que transmite paz y una fortaleza que inspira a los demás. Eres alguien único, valioso y mereces absolutamente todo lo bonito que existe. 💛
+                    </p>
+                    <p>
+                       Espero de todo corazón que hoy pases un día maravilloso, rodeada de tu familia, de las personas que te quieren y que te conocen de cerca. Que disfrutes cada momento junto a ellos: las risas, la comida, las palabras bonitas, los abrazos y cada detalle que te dediquen. Que compartan, que convivan, que recuerden momentos bonitos y que creen nuevos recuerdos que guarden para siempre. Que hoy te sientas muy querida, muy consentida y muy acompañada por todos los que están a tu lado. 💕
+                    </p>
+                    <p>
+                        Deseo que este nuevo año de vida te traiga salud, paz, alegrías sin fin y que cada uno de tus sueños se vaya cumpliendo, uno por uno. Que nunca te falten motivos para sonreír, que tengas fuerza en los días difíciles y que siempre encuentres luz en tu camino. Mereces todo lo bueno del mundo, sin excepción. 🌷✨
+                    </p>
+                    <p>
+                        Gracias por ser tú, por compartir tu esencia y por dejarme conocer una parte tan linda de ti. Que la vida te devuelva multiplicado todo lo bien que tú das. Que hoy sea el inicio de tu mejor año hasta ahora. Te aprecio con todo mi corazón. 💫
+                     </p>   
+                    <p class="font-bold text-pink-700 pt-1">
+                        ¡Feliz cumpleaños! Que la pases increíble junto a tu familia 🎈🎉💛
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Trigger celebratory confetti burst
+        function triggerConfettiBurst() {
+            var count = 220;
+            var defaults = {
+                origin: { y: 0.65 }
+            };
+
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, {
+                    particleCount: Math.floor(count * particleRatio)
+                }));
+            }
+
+            fire(0.25, {
+                spread: 26,
+                startVelocity: 55,
+                colors: ['#f472b6', '#fbbf24', '#38bdf8']
+            });
+            fire(0.2, {
+                spread: 60,
+                colors: ['#db2777', '#fef08a', '#a7f3d0']
+            });
+            fire(0.35, {
+                spread: 100,
+                decay: 0.91,
+                scalar: 0.8
+            });
+            fire(0.1, {
+                spread: 120,
+                startVelocity: 25,
+                decay: 0.92,
+                scalar: 1.2
+            });
+            fire(0.1, {
+                spread: 120,
+                startVelocity: 45,
+            });
+        }
+
+        // Screen 1 -> Screen 2 (Gift to Cake)
+        function openGift() {
+            document.getElementById('screen1').classList.add('hidden');
+            document.getElementById('screen2').classList.remove('hidden');
+            triggerConfettiBurst();
+        }
+
+        // Screen 2 -> Screen 3 (Cake to Letter)
+        function openLetter() {
+            document.getElementById('screen2').classList.add('hidden');
+            document.getElementById('screen3').classList.remove('hidden');
+            
+            // Shower of confetti for letter
+            confetti({
+                particleCount: 90,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: ['#f472b6', '#e879f9', '#fef08a', '#67e8f9']
+            });
+        }
+    </script>
+</body>
+</html>
